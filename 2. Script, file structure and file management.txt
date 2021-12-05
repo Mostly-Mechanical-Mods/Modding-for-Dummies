@@ -3,26 +3,31 @@
 # Script
 
 The development process of a game like CK3 probably looks something like this:
-- Game designers come up with the mechanics they'd like to see in the game. In CK3, the focus is on characters interacting with each other, in the context of medieval rulers.
+- Game designers come up with the mechanics they'd like to see in the game. In CK3, the focus is on medieval ruler characters interacting with each other, and with their court.
 - Programmers code these systems, in a language called C++, and this code runs a simulation. If you switch to Observer Mode, the game basically plays itself.
-- Content Designers plug stuff into these systems to populate the world, so the simulation actually has something to run on. So things like Map data, Characters, the Titles they hold, the Traits they gain, the Religion they follow, the Events they will encounter during this simulation.
+- Content Designers plug content into these systems to populate the world, so the simulation actually has something to run on. So things like Map data, Characters, the Titles they hold, the Traits they gain, the Religion they follow, the Events they will encounter during this simulation.
 - Programmers also build an interface, commonly called GUI for Graphical User Interface: those buttons you click and events you read and tooltips you ignore and map you blob on and fancy characters you look at.
 - Artists make that interface look all fancy
 
-Paradox can't recruit Content Designers and Artists that all know C++, because those are very different skillsets. So Programmers created a scripting language, which looks like code, but isn't: it's script. It has rules that are simplified enough that they can be taught to pretty much anyone. So the good news is: you don't need to be a programmer to mod Paradox games. Most modders aren't, just like most Content Designers working at Paradox aren't either. 
+Paradox can't recruit Content Designers and Artists that all know C++, because those are very different skillsets. So Programmers created a scripting language, which looks like code, but isn't: it's script. It has rules that are simplified enough that they can be taught to pretty much anyone. So the good news is, you don't need to be a programmer to mod Paradox games: most modders aren't. 
+
 The same is true for GUI, which has its own separate scripting language, but we'll put that aside for now, because GUI is a different beast that we'll tackle much later.
 
-# Folder structure
+# File structure
 
 To understand what modders can do with script, we must make a detour via file management.
 
 The game files are basically a file cabinet. When you open a drawer, there's a number of folders in there, that are neatly labeled. Each of those folders matches a database in the game code, so what folder a file is in is very important. In each of those folders, there are any number of files - literal text files, usually. And in these files, you will find objects.
 
-Objects is a bit of an abstract term, on purpose: they can be of different nature, and it is the path of the file that determines the nature of the objects in those files. In script, an object is a primary script block defined by a unique key ; and a script block is opened by using the equal sign followed by an opening bracket, and closed by using a closing bracket. Anything inside those brackets are not objects themselves: they can be parameters of that object, or commands that should be executed on that object.
+Objects is a bit of an abstract term, on purpose: they can be of different nature, and it is the path of a file that determines the nature of the objects in that file. In script, any top level script block defined by a unique key is an object ; and a script block is opened by using the equal sign followed by an opening bracket, and closed by using a closing bracket.
+
+To make things a bit confusing: *most* objects are defined as top level script blocks, but *some* objects are defined inside other objects.
+For example, in the religion files, the top level script block is a culture_group, and in that top level script block, you will first find a bunch of parameters, and then a faiths block, in which individual faiths are defined, with their own parameters.
 
 # File management
 
-When you start the game, it opens those cabinets, goes through each of those folders, takes files one by one, and loads them in the appropriate database. Then if you have a mod enabled, the game will do the same with the mod's cabinet.
+When you start the game, it opens the game file cabinet, goes through each of those folders, takes files one by one, and loads them in the appropriate database.
+Then if you have a mod enabled, the game will do the same with the mod's file cabinet.
 
 If it finds two files in the same folder, and with the same name, it throws out the vanilla version, and replaces it with the mod’s version. That's how Total Conversion mods replace most of the content from vanilla, and why you don't have the King of France running around Tamriel in Elder Kings II, because that would be silly.
 
@@ -40,7 +45,8 @@ The two important things to keep in mind are:
 
 - be careful about your folder structure: the path of a file is how the game knows what kind of content this file contains - and how it should be handled. If you put a culture file in the religion folder, it won't work. If you misspell the name of a folder, it won’t work either.
 
-- be mindful of your file names: having a file with the same path and name as a vanilla file means it will replace that whole file, whereas having a file with a custom name means that only objects found in that file will be added or changed. So you should put in your mod only what is necessary for it to work, and avoid replacing vanilla content with another identical version, because it will cause compatibility issues with other mods that might be changing those very same things, and when the game is patched, it makes updating your mod much more complicated than it should be.
+- be mindful of your file names: having a file with the same path and name as a vanilla file means it will replace that whole file, whereas having a file with a custom name means that only objects found in that file will be added or changed.
+Whenever you can, you should put in your mod only what is necessary for it to work, and avoid replacing objects that you don't need to, because it will cause compatibility issues with other mods that might be changing those very same objects, and when the game is patched, it makes updating your mod much more complicated than it should be.
 
 That’s it for this tutorial! This was Mostly Mechanical Mods’ Modding for Dummies, thank you for watching, and I will see you in the next video.
  
